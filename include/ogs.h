@@ -25,7 +25,7 @@ extern "C" {
 #define OGS_MAKE_VERSION(major, minor, patch)                                  \
     (((uint32_t)(major) << 16) | ((uint32_t)(minor) << 8) | (uint32_t)(patch))
 
-#define OGS_VERSION                                                           \
+#define OGS_VERSION                                                            \
     OGS_MAKE_VERSION(OGS_VERSION_MAJOR, OGS_VERSION_MINOR, OGS_VERSION_PATCH)
 
 /* -------------------------------------------------------------------------

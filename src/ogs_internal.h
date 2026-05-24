@@ -13,11 +13,11 @@
 #include <vulkan/vulkan.h>
 
 extern FILE *_OGS_LOG_SINK;
-#define OGS_LOG(fmt, ...)                                             \
-    do {                                                              \
-        if (_OGS_LOG_SINK != NULL) {                                  \
-            fprintf(_OGS_LOG_SINK, "[OGS] " fmt "\n", ##__VA_ARGS__); \
-        }                                                             \
+#define OGS_LOG(fmt, ...)                                                      \
+    do {                                                                       \
+        if (_OGS_LOG_SINK != NULL) {                                           \
+            fprintf(_OGS_LOG_SINK, "[OGS] " fmt "\n", ##__VA_ARGS__);          \
+        }                                                                      \
     } while (0)
 
 void _ogsInitLog(void);
