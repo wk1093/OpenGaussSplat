@@ -1,0 +1,27 @@
+name: Format Code
+
+on: [push, pull_request]
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install clang-format
+        run: sudo apt-get update && sudo apt-get install -y clang-format
+
+      - name: Run clang-format
+        # Runs formatting on all relevant files in src and include
+        run: find src include -name "*.c" -o -name "*.h" | xargs clang-format -i -style=file
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(style): auto-format code"
+          # Only runs if there are actual changes

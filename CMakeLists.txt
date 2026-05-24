@@ -30,7 +30,7 @@ find_package(Vulkan REQUIRED)
 # -------------------------------------------------------------------------
 # Core library
 # -------------------------------------------------------------------------
-add_library(opengs SHARED
+add_library(opengs STATIC
     include/ogs.h
     src/ogs_internal.h
     src/ogs_context.c
