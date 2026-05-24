@@ -21,20 +21,20 @@ extern "C" {
 #define OGS_VERSION_MINOR 1
 #define OGS_VERSION_PATCH 0
 
-#define OGS_MAKE_VERSION(major, minor, patch) \
+#define OGS_MAKE_VERSION(major, minor, patch)                                  \
     (((uint32_t)(major) << 16) | ((uint32_t)(minor) << 8) | (uint32_t)(patch))
 
-#define OGS_VERSION \
+#define OGS_VERSION                                                           \
     OGS_MAKE_VERSION(OGS_VERSION_MAJOR, OGS_VERSION_MINOR, OGS_VERSION_PATCH)
 
 /* -------------------------------------------------------------------------
  * Result codes
  * ---------------------------------------------------------------------- */
 typedef enum OgsResult {
-    OGS_SUCCESS                    = 0,
-    OGS_ERROR_OUT_OF_MEMORY        = -1,
-    OGS_ERROR_VULKAN_INIT_FAILED   = -2,
-    OGS_ERROR_NO_SUITABLE_DEVICE   = -3,
+    OGS_SUCCESS = 0,
+    OGS_ERROR_OUT_OF_MEMORY = -1,
+    OGS_ERROR_VULKAN_INIT_FAILED = -2,
+    OGS_ERROR_NO_SUITABLE_DEVICE = -3,
 } OgsResult;
 
 /* -------------------------------------------------------------------------
@@ -57,21 +57,21 @@ typedef struct OgsContext OgsContext;
  *
  * Returns a heap-allocated OgsContext* on success, or NULL on failure.
  */
-OgsContext* ogsInit(void);
+OgsContext *ogsInit(void);
 
 /*
  * ogsShutdown - Destroy all Vulkan resources and free the context.
  *
  * Safe to call with NULL.
  */
-void ogsShutdown(OgsContext* ctx);
+void ogsShutdown(OgsContext *ctx);
 
 /* -------------------------------------------------------------------------
  * Utilities
  * ---------------------------------------------------------------------- */
 
 /* Returns a human-readable string for the given OgsResult. */
-const char* ogsGetErrorString(OgsResult result);
+const char *ogsGetErrorString(OgsResult result);
 
 #ifdef __cplusplus
 }

@@ -1,14 +1,14 @@
 #include <ogs.h>
 #include <stdio.h>
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     (void)argc;
     (void)argv;
 
-    printf("Initializing OpenGaussSplat v%d.%d.%d...\n",
-        OGS_VERSION_MAJOR, OGS_VERSION_MINOR, OGS_VERSION_PATCH);
+    printf("Initializing OpenGaussSplat v%d.%d.%d...\n", OGS_VERSION_MAJOR,
+           OGS_VERSION_MINOR, OGS_VERSION_PATCH);
 
-    OgsContext* ctx = ogsInit();
+    OgsContext *ctx = ogsInit();
     if (!ctx) {
         fprintf(stderr, "Failed to initialize OGS context.\n");
         return 1;
