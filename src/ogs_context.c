@@ -20,7 +20,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL _ogsDebugCallback(
     (void)type;
     (void)user_data;
     if (severity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
-        fprintf(stderr, "[OGS Vulkan] %s\n", data->pMessage);
+        OGS_LOG("[Vulkan] %s", data->pMessage);
     }
     return VK_FALSE;
 }
@@ -133,7 +133,7 @@ static VkPhysicalDevice _ogsSelectPhysicalDevice(VkInstance instance,
 #ifdef OGS_DEBUG
         VkPhysicalDeviceProperties props;
         vkGetPhysicalDeviceProperties(selected, &props);
-        fprintf(stderr, "[OGS] Selected device: %s\n", props.deviceName);
+        OGS_LOG("Selected device: %s", props.deviceName);
 #endif
     }
 
@@ -145,6 +145,7 @@ static VkPhysicalDevice _ogsSelectPhysicalDevice(VkInstance instance,
  * ---------------------------------------------------------------------- */
 
 OgsContext *ogsInit(void) {
+    _ogsInitLog();
     OgsContext *ctx = calloc(1, sizeof(OgsContext));
     if (!ctx) return NULL;
 
@@ -173,8 +174,7 @@ OgsContext *ogsInit(void) {
         instance_ci.enabledExtensionCount = 1;
         instance_ci.ppEnabledExtensionNames = debug_extensions;
     } else {
-        fprintf(stderr,
-                "[OGS] Validation layers requested but not available.\n");
+        OGS_LOG("Validation layers requested but not available.");
     }
 #endif
 

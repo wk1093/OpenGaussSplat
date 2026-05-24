@@ -22,6 +22,7 @@ add_library(opengs SHARED
     include/ogs.h
     src/ogs_internal.h
     src/ogs_context.c
+    src/ogs_logging.c
 )
 add_format_target(opengs)
 

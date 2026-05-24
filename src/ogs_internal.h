@@ -5,11 +5,22 @@
  * ogs_internal.h - Private implementation types.
  *
  * This header MUST NOT be included from any public-facing header.
- * It is the only place where Vulkan types appear directly.
+ * It is the only header where Vulkan types appear directly.
  */
 
 #include "ogs.h"
 #include <vulkan/vulkan.h>
+#include <stdio.h>
+
+extern FILE* _OGS_LOG_SINK;
+#define OGS_LOG(fmt, ...) \
+    do { \
+        if (_OGS_LOG_SINK != NULL) { \
+            fprintf(_OGS_LOG_SINK, "[OGS] " fmt "\n", ##__VA_ARGS__); \
+        } \
+    } while(0)
+
+void _ogsInitLog(void);
 
 struct OgsContext {
     VkInstance instance;

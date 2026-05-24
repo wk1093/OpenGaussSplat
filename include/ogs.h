@@ -2,6 +2,7 @@
 #define OGS_H
 
 #include <stdint.h>
+#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,6 +73,13 @@ void ogsShutdown(OgsContext *ctx);
 
 /* Returns a human-readable string for the given OgsResult. */
 const char *ogsGetErrorString(OgsResult result);
+
+/**
+ * ogsSetLogSink - Redirect OGS log output to the specified FILE* stream, this defaults to stdout.
+ * 
+ * Safe to call with NULL, which will stop/pause logging until a new sink is set. This may or may not result in performance benefits.
+ */
+void ogsSetLogSink(FILE* sink);
 
 #ifdef __cplusplus
 }
