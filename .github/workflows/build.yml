@@ -1,0 +1,29 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    # On Linux, we need the Vulkan headers/loader
+    - name: Install Vulkan SDK (Linux)
+      if: runner.os == 'Linux'
+      run: sudo apt-get update && sudo apt-get install -y libvulkan-dev
+
+    - name: Configure CMake
+      # We enable STRICT_COMPILE here, forcing the CI to fail on warnings
+      run: >
+        cmake -S . -B build 
+        -DSTRICT_COMPILE=ON
+        -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --config Release
