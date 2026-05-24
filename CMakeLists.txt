@@ -15,8 +15,11 @@ include(Format)
 option(STRICT_COMPILE "Enable -Werror or /WX to treat warnings as errors" OFF)
 # default to off for developer convenience, but CI will enable this
 if (STRICT_COMPILE)
-    add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/WX>)
-    add_compile_options($<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Werror>)
+    if (MSVC)
+        add_compile_options(/WX)
+    else()
+        add_compile_options(-Werror)
+    endif()
 endif()
 
 
