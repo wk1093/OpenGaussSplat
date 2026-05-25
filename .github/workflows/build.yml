@@ -30,4 +30,4 @@ jobs:
     - name: Build
       run: cmake --build build --config Release
     - name: Run Tests
-      run: ctest --build build --config Release --target check
+      run: cmake --build build --config Release --target check
