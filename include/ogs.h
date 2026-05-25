@@ -8,16 +8,6 @@
 extern "C" {
 #endif
 
-/*
- * OpenGaussSplat (OGS) - Public API
- *
- * All public symbols are prefixed with `ogs`. Vulkan types are intentionally
- * kept out of this header; see src/ogs_internal.h for the concrete definitions.
- */
-
-/* -------------------------------------------------------------------------
- * Version
- * ---------------------------------------------------------------------- */
 #define OGS_VERSION_MAJOR 0
 #define OGS_VERSION_MINOR 1
 #define OGS_VERSION_PATCH 0
@@ -28,59 +18,25 @@ extern "C" {
 #define OGS_VERSION                                                            \
     OGS_MAKE_VERSION(OGS_VERSION_MAJOR, OGS_VERSION_MINOR, OGS_VERSION_PATCH)
 
-/* -------------------------------------------------------------------------
- * Result codes
- * ---------------------------------------------------------------------- */
 typedef enum OgsResult {
     OGS_SUCCESS = 0,
-    OGS_ERROR_OUT_OF_MEMORY = -1,
-    OGS_ERROR_VULKAN_INIT_FAILED = -2,
-    OGS_ERROR_NO_SUITABLE_DEVICE = -3,
+    OGS_ERROR_INVALID_ARGUMENT = -1,
+    OGS_ERROR_OUT_OF_MEMORY = -2,
+    OGS_ERROR_VULKAN_INIT_FAILED = -3,
+    OGS_ERROR_NO_SUITABLE_DEVICE = -4,
 } OgsResult;
 
-/* -------------------------------------------------------------------------
- * Opaque handles
- * ---------------------------------------------------------------------- */
-
-/* The core context. All OGS operations require a valid OgsContext*. */
+// The core context. All OGS operations require a valid OgsContext*.
 typedef struct OgsContext OgsContext;
-
-/* -------------------------------------------------------------------------
- * Core lifecycle
- * ---------------------------------------------------------------------- */
-
-/*
- * ogsInit - Initialize the OGS context and underlying Vulkan resources.
- *
- * Selects the best available compute-capable GPU (prefers discrete).
- * In Debug builds (OGS_DEBUG defined), Vulkan validation layers and the
- * debug messenger are enabled automatically.
- *
- * Returns a heap-allocated OgsContext* on success, or NULL on failure.
- */
 OgsContext *ogsInit(void);
-
-/*
- * ogsShutdown - Destroy all Vulkan resources and free the context.
- *
- * Safe to call with NULL.
- */
 void ogsShutdown(OgsContext *ctx);
 
-/* -------------------------------------------------------------------------
- * Utilities
- * ---------------------------------------------------------------------- */
+// Opaque handle for GPU buffers. Details are hidden from the public API.
+typedef struct OgsBuffer OgsBuffer;
+OgsBuffer *ogsCreateBuffer(OgsContext *ctx, size_t size, OgsResult *out_result);
+void ogsDestroyBuffer(OgsContext *ctx, OgsBuffer *buffer);
 
-/* Returns a human-readable string for the given OgsResult. */
 const char *ogsGetErrorString(OgsResult result);
-
-/**
- * ogsSetLogSink - Redirect OGS log output to the specified FILE* stream, this
- * defaults to stdout.
- *
- * Safe to call with NULL, which will stop/pause logging until a new sink is
- * set. This may or may not result in performance benefits.
- */
 void ogsSetLogSink(FILE *sink);
 
 #ifdef __cplusplus

@@ -35,6 +35,7 @@ add_library(opengs STATIC
     src/ogs_internal.h
     src/ogs_context.c
     src/ogs_logging.c
+    src/ogs_buffer.c
 )
 add_format_target(opengs)
 

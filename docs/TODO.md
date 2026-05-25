@@ -3,7 +3,7 @@
 ## Features
 
 - [ ] Add `ogsCreateBuffer`/`ogsDestroyBuffer` API skeleton (2-4h)
-  - [ ] Introduce opaque `OgsBuffer` handle in public API.
+  - [x] Introduce opaque `OgsBuffer` handle in public API.
   - [ ] Add create/destroy declarations in `ogs.h`.
   - [ ] Wire minimal internal allocation/free path with clear error returns.
 

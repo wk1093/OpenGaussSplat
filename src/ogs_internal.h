@@ -22,6 +22,13 @@ extern FILE *_OGS_LOG_SINK;
 
 void _ogsInitLog(void);
 
+struct OgsBuffer {
+    VkDevice device;
+    VkBuffer buffer;
+    VkDeviceMemory memory;
+    size_t size;
+};
+
 struct OgsContext {
     VkInstance instance;
     VkPhysicalDevice physicalDevice;

@@ -269,6 +269,7 @@ void ogsShutdown(OgsContext *ctx) {
 const char *ogsGetErrorString(OgsResult result) {
     switch (result) {
     case OGS_SUCCESS: return "OGS_SUCCESS";
+    case OGS_ERROR_INVALID_ARGUMENT: return "OGS_ERROR_INVALID_ARGUMENT";
     case OGS_ERROR_OUT_OF_MEMORY: return "OGS_ERROR_OUT_OF_MEMORY";
     case OGS_ERROR_VULKAN_INIT_FAILED: return "OGS_ERROR_VULKAN_INIT_FAILED";
     case OGS_ERROR_NO_SUITABLE_DEVICE: return "OGS_ERROR_NO_SUITABLE_DEVICE";
