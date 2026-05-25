@@ -1,5 +1,5 @@
-#include <ogs.h>
 #include "ogs_test_support.h"
+#include <ogs.h>
 #include <stdio.h>
 
 int main(void) {
