@@ -1,4 +1,4 @@
-name: Build
+name: Build and Test
 
 on: [push, pull_request]
 
@@ -29,3 +29,5 @@ jobs:
 
     - name: Build
       run: cmake --build build --config Release
+    - name: Run Tests
+      run: ctest --build build --config Release --target check
