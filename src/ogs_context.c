@@ -174,7 +174,7 @@ OgsContext *ogsInit(void) {
         instance_ci.enabledExtensionCount = 1;
         instance_ci.ppEnabledExtensionNames = debug_extensions;
     } else {
-        OGS_LOG("Validation layers requested but not available.");
+        OGS_LOG_STR("Validation layers requested but not available.");
     }
 #endif
 

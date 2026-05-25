@@ -10,7 +10,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(CompilerFlags)
 include(ShaderCompilation)
 include(Platform)
-include(Format)
+include(CTest)
 
 option(STRICT_COMPILE "Enable -Werror or /WX to treat warnings as errors" OFF)
 # default to off for developer convenience, but CI will enable this
@@ -37,7 +37,6 @@ add_library(opengs STATIC
     src/ogs_logging.c
     src/ogs_buffer.c
 )
-add_format_target(opengs)
 
 target_include_directories(opengs
     PUBLIC  include   # consumers only see the public API
@@ -54,12 +53,8 @@ target_compile_definitions(opengs PRIVATE
 ogs_set_compiler_flags(opengs)
 
 # -------------------------------------------------------------------------
-# Test / sandbox executable
+# Test suite
 # -------------------------------------------------------------------------
-add_executable(ogs_test tests/ogs_test.c)
-add_format_target(ogs_test)
-target_link_libraries(ogs_test PRIVATE opengs)
-target_compile_definitions(ogs_test PRIVATE
-    $<$<CONFIG:Debug>:OGS_DEBUG>
-)
-ogs_set_compiler_flags(ogs_test)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

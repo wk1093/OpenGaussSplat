@@ -70,7 +70,8 @@ OgsBuffer *ogsCreateBuffer(OgsContext *ctx, size_t size,
                            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
                                VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
     if (memory_type_index == UINT32_MAX) {
-        OGS_LOG("No suitable host-visible memory type for buffer allocation.");
+        OGS_LOG_STR(
+            "No suitable host-visible memory type for buffer allocation.");
         vkDestroyBuffer(ctx->device, buffer->buffer, NULL);
         free(buffer);
         if (out_result) {
