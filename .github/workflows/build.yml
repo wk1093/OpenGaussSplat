@@ -13,7 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # This one action handles the complex setup per-platform for you.
     - name: Setup Vulkan SDK
       uses: jakoch/install-vulkan-sdk-action@v1
       with:
@@ -24,12 +23,17 @@ jobs:
         stripdown: true
         install_swiftshader: true
         install_lavapipe: true
+      
+    - name: Install Ninja (Windows)
+      if: runner.os == 'Windows'
+      run: choco install ninja
 
     - name: Configure CMake
       run: >
         cmake -S . -B build 
         -DSTRICT_COMPILE=ON
         -DCMAKE_BUILD_TYPE=Release
+        -G "Ninja"
 
     - name: Build
       run: cmake --build build --config Release
