@@ -15,32 +15,6 @@ jobs:
 
     # This one action handles the complex setup per-platform for you.
     - name: Setup Vulkan SDK
-      uses: humbletim/setup-vulkan-sdk@v1.2.1
-      with:
-        vulkan-query-version: latest
-        vulkan-components: Vulkan-Headers, Vulkan-Loader
-        vulkan-use-cache: true
-
-    - name: Configure CMake
-      run: >
-        cmake -S . -B build 
-        -DSTRICT_COMPILE=ON
-        -DCMAKE_BUILD_TYPE=Release
-
-    - name: Build
-      run: cmake --build build --config Release
-  test:
-    needs: build
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    
-    runs-on: ${{ matrix.os }}
-    
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup Vulkan SDK
       uses: jakoch/install-vulkan-sdk-action@v1
       with:
         vulkan_version: latest
@@ -50,5 +24,15 @@ jobs:
         stripdown: true
         install_swiftshader: true
         install_lavapipe: true
+
+    - name: Configure CMake
+      run: >
+        cmake -S . -B build 
+        -DSTRICT_COMPILE=ON
+        -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --config Release
+
     - name: Run Tests
-      run: ctest --test-dir build --output-on-failure
+      run: cmake --build build --config Release --target check
