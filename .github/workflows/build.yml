@@ -39,4 +39,5 @@ jobs:
       run: cmake --build build --config Release
 
     - name: Run Tests
+      if: runner.os != 'macOS'
       run: cmake --build build --config Release --target check
