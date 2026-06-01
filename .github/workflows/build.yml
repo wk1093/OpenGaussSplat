@@ -39,6 +39,4 @@ jobs:
       run: cmake --build build --config Release
 
     - name: Run Tests
-      env:
-        VK_ICD_FILENAMES: ${{ env.VULKAN_SDK }}/etc/vulkan/icd.d/vk_swiftshader_icd.json
       run: cmake --build build --config Release --target check

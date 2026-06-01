@@ -85,6 +85,34 @@ static int _ogsFindComputeQueueFamily(VkPhysicalDevice physical_device,
     return found;
 }
 
+#if defined(__APPLE__) && defined(VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME)
+static int _ogsDeviceSupportsExtension(VkPhysicalDevice physical_device,
+                                       const char *extension_name) {
+    uint32_t extension_count = 0;
+    vkEnumerateDeviceExtensionProperties(physical_device, NULL,
+                                         &extension_count, NULL);
+    if (extension_count == 0) return 0;
+
+    VkExtensionProperties *extensions =
+        malloc(sizeof(VkExtensionProperties) * extension_count);
+    if (!extensions) return 0;
+
+    vkEnumerateDeviceExtensionProperties(physical_device, NULL,
+                                         &extension_count, extensions);
+
+    int found = 0;
+    for (uint32_t i = 0; i < extension_count; i++) {
+        if (strcmp(extensions[i].extensionName, extension_name) == 0) {
+            found = 1;
+            break;
+        }
+    }
+
+    free(extensions);
+    return found;
+}
+#endif
+
 /*
  * _ogsSelectPhysicalDevice - Enumerates devices and picks the best one.
  * Prefers a discrete GPU; falls back to any device with compute support.
@@ -166,17 +194,32 @@ OgsContext *ogsInit(void) {
         .pApplicationInfo = &app_info,
     };
 
+    const char *instance_extensions[2];
+    uint32_t instance_extension_count = 0;
+
 #ifdef OGS_DEBUG
-    const char *debug_extensions[] = {VK_EXT_DEBUG_UTILS_EXTENSION_NAME};
     if (_ogsCheckValidationLayerSupport()) {
         instance_ci.enabledLayerCount = VALIDATION_LAYER_COUNT;
         instance_ci.ppEnabledLayerNames = VALIDATION_LAYERS;
-        instance_ci.enabledExtensionCount = 1;
-        instance_ci.ppEnabledExtensionNames = debug_extensions;
+        instance_extensions[instance_extension_count++] =
+            VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
     } else {
         OGS_LOG_STR("Validation layers requested but not available.");
     }
 #endif
+
+#if defined(__APPLE__) && \
+    defined(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME) && \
+    defined(VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR)
+    instance_ci.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+    instance_extensions[instance_extension_count++] =
+        VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME;
+#endif
+
+    if (instance_extension_count > 0) {
+        instance_ci.enabledExtensionCount = instance_extension_count;
+        instance_ci.ppEnabledExtensionNames = instance_extensions;
+    }
 
     if (vkCreateInstance(&instance_ci, NULL, &ctx->instance) != VK_SUCCESS) {
         free(ctx);
@@ -226,6 +269,22 @@ OgsContext *ogsInit(void) {
         .queueCreateInfoCount = 1,
         .pQueueCreateInfos = &queue_ci,
     };
+
+    const char *device_extensions[1];
+    uint32_t device_extension_count = 0;
+
+#if defined(__APPLE__) && defined(VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME)
+    if (_ogsDeviceSupportsExtension(ctx->physicalDevice,
+                                    VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME)) {
+        device_extensions[device_extension_count++] =
+            VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME;
+    }
+#endif
+
+    if (device_extension_count > 0) {
+        device_ci.enabledExtensionCount = device_extension_count;
+        device_ci.ppEnabledExtensionNames = device_extensions;
+    }
 
     if (vkCreateDevice(ctx->physicalDevice, &device_ci, NULL, &ctx->device) !=
         VK_SUCCESS) {
