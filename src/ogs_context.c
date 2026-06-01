@@ -208,8 +208,8 @@ OgsContext *ogsInit(void) {
     }
 #endif
 
-#if defined(__APPLE__) && \
-    defined(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME) && \
+#if defined(__APPLE__) &&                                                      \
+    defined(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME) &&                  \
     defined(VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR)
     instance_ci.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
     instance_extensions[instance_extension_count++] =
